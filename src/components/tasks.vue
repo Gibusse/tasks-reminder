@@ -4,7 +4,7 @@
       <v-timeline-item
         fill-dot
         class="white--text mb-12"
-        color="orange"
+        color="normal"
         large
       >
         <template v-slot:icon>
@@ -14,7 +14,7 @@
           v-model="input"
           hide-details
           flat
-          label="Leave a comment..."
+          label="Leave a task..."
           solo
           @keydown.enter="comment"
         >
@@ -37,12 +37,15 @@
           v-for="event in timeline"
           :key="event.id"
           class="mb-4"
-          color="pink"
+          color="error"
           large
         >
           <v-row justify="space-between">
-            <v-col cols="7" v-text="event.text"></v-col>
-            <v-col class="text-right" cols="5" v-text="event.time"></v-col>
+            <v-card dark class="normal ma-1">
+              <v-card-text v-text="event.text"></v-card-text>
+              <v-card-text class="text-right" v-text="event.time"></v-card-text>
+              <v-btn class="text-center" color="warning" @click="taskCompleted">Close Task</v-btn>
+            </v-card>
           </v-row>
         </v-timeline-item>
       </v-slide-x-transition>
@@ -51,89 +54,7 @@
         class="mb-6"
         hide-dot
       >
-        <span>TODAY</span>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-4"
-        color="grey"
-        icon-color="grey lighten-2"
-        large
-      >
-        <v-row justify="space-between">
-          <v-col cols="7">This order was archived.</v-col>
-          <v-col class="text-right" cols="5">15:26 EDT</v-col>
-        </v-row>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-4"
-        small
-      >
-        <v-row justify="space-between">
-          <v-col cols="7">
-            <v-chip
-              class="white--text ml-0"
-              color="purple"
-              label
-              large
-            >
-              APP
-            </v-chip>
-            Digital Downloads fulfilled 1 item.
-          </v-col>
-          <v-col class="text-right" cols="5">15:25 EDT</v-col>
-        </v-row>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-4"
-        color="grey"
-        large
-      >
-        <v-row justify="space-between">
-          <v-col cols="7">
-            Order confirmation email was sent to John Leider (john@vuetifyjs.com).
-          </v-col>
-          <v-col class="text-right" cols="5">15:25 EDT</v-col>
-        </v-row>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-4"
-        hide-dot
-      >
-        <v-btn
-          class="mx-0"
-          color="white"
-        >
-          Resend Email
-        </v-btn>
-      </v-timeline-item>
-
-      <v-timeline-item
-        class="mb-4"
-        color="grey"
-        large
-      >
-        <v-row justify="space-between">
-          <v-col cols="7">
-            A $15.00 USD payment was processed on PayPal Express Checkout
-          </v-col>
-          <v-col class="text-right" cols="5">15:25 EDT</v-col>
-        </v-row>
-      </v-timeline-item>
-
-      <v-timeline-item
-        color="grey"
-        large
-      >
-        <v-row justify="space-between">
-          <v-col cols="7">
-            John Leider placed this order on Online Store (checkout #1937432132572).
-          </v-col>
-          <v-col class="text-right" cols="5">15:25 EDT</v-col>
-        </v-row>
+ 
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -166,6 +87,11 @@
 
         this.input = null
       },
+
+      taskCompleted() {
+        console.log(event.id)
+        this.events.splice(event.id)
+      }
     },
   }
 </script>
