@@ -2,34 +2,16 @@
   <v-app>
     <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light">Tasks reminder</span>
+        <router-link to="/" tag="span"><v-btn  class="font-weight-bold" text>Tasks reminder</v-btn></router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        text
-        href="#"
-        target="_blank"
-      >
-        <span class="mr-2">What's coming ?</span>
-      </v-btn>
+      <router-link to="/login" tag="span"><v-btn text>Login</v-btn></router-link>
     </v-app-bar>
 
-    <v-content>
-      
+    <v-content fluid>
+     <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
-<script>
-// import HelloWorld from './components/HelloWorld';
 
-export default {
-  name: 'App',
-  components: {
-    
-  },
-  data: () => ({
-    //
-  }),
-};
-</script>
