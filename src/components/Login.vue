@@ -44,11 +44,17 @@ export default {
 
     methods: {
         loginUser() {
-            axios.post('http://localhost:4000/api/login', this.login)
+            if(this.login.username === "" || this.login.password === "") {
+                swal("Erreur", "Veuillez remplir les champs !!!", "error");
+
+            } else {
+                axios.post('http://localhost:4000/api/login', this.login)
             .then(response => {
                 let res = response;
-                if(res.status === 200) this.$router.push('/');
+                if(res.status === 200) this.$router.push('/dashboard');
             })
+            }
+            
         }
     }
 }

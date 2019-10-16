@@ -1,6 +1,6 @@
 <template>
   <v-container style="max-width: 600px;">
-    <v-timeline dense clipped>
+    <v-timeline  clipped>
       <v-timeline-item
         fill-dot
         class="white--text mb-12"
@@ -11,10 +11,19 @@
           <span>JL</span>
         </template>
         <v-text-field
-          v-model="input"
+          v-model="title"
           hide-details
           flat
-          label="Leave a task..."
+          label="Leave a title..."
+          solo
+          @keydown.enter="comment"
+        >
+        </v-text-field>
+        <v-text-field
+          v-model="taskName"
+          hide-details
+          flat
+          label="Leave a description..."
           solo
           @keydown.enter="comment"
         >
@@ -27,6 +36,7 @@
               Post
             </v-btn>
           </template>
+         
         </v-text-field>
       </v-timeline-item>
 
@@ -34,19 +44,23 @@
         group
       >
         <v-timeline-item
-          v-for="event in timeline"
-          :key="event.id"
-          class="mb-4"
-          color="error"
+          v-for="event in tasks"
+          :key="event.taskId"
+          color="red lighten-2"
           large
         >
-          <v-row justify="space-between">
-            <v-card dark class="normal ma-1">
-              <v-card-text v-text="event.text"></v-card-text>
-              <v-card-text class="text-right" v-text="event.time"></v-card-text>
-              <v-btn class="text-center" color="warning" @click="taskCompleted">Close Task</v-btn>
-            </v-card>
-          </v-row>
+
+        <template v-slot:opposite>
+          <span
+            v-text="event.taskDate"
+          ></span>
+        </template>
+
+        <v-card class="elevation-2">
+          <v-card-title v-text="event.title" class="headline"></v-card-title>
+          <v-card-text v-text="event.taskName"></v-card-text>
+          <v-btn class="text-right" color="primary" @click="taskCompleted">Fermer la tâche</v-btn>
+        </v-card>
         </v-timeline-item>
       </v-slide-x-transition>
 
@@ -54,7 +68,6 @@
         class="mb-6"
         hide-dot
       >
- 
       </v-timeline-item>
     </v-timeline>
   </v-container>
@@ -63,34 +76,50 @@
 <script>
   export default {
     data: () => ({
-      events: [],
-      input: null,
+      tasks: [],
+      events: [{taskId:null, title:null, taskName:null, taskDate:null}],
+      taskName: "",
+      title: "",
       nonce: 0,
     }),
 
-    computed: {
-      timeline () {
-        return this.events.slice().reverse()
-      },
+    mounted() {
+      axios.get('http://localhost:4000/api/')
+        .then(response => {
+          this.tasks = response.data
+        })
     },
+
+    /* computed: {
+      timeline () {
+        return this.tasks.slice().reverse()
+      },
+    }, */
 
     methods: {
       comment () {
         const time = (new Date()).toTimeString()
-        this.events.push({
-          id: this.nonce++,
-          text: this.input,
-          time: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents, offset) => {
-            return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
-          }),
-        })
+        if(this.title === "" || this.taskName === "") {
+          swal("Erreur", "Veuillez remplir les champs !!!", "error");
 
-        this.input = null
+        } else {
+            this.tasks.push({
+            taskId: this.nonce++,
+            title: this.title,
+            taskName: this.taskName,
+            taskDate: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents) => {
+              return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
+            }),
+          })
+
+          this.taskName = null,
+          this.title = null
+        }
+        
       },
 
       taskCompleted() {
-        console.log(event.id)
-        this.events.splice(event.id)
+        this.tasks.splice(event.taskId)
       }
     },
   }
