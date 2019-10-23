@@ -4,6 +4,8 @@ import Tasks from '@/components/tasks'
 import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
+import AddTask from '@/components/AddTask'
+import TasksDone from '@/components/TasksDone'
 
 Vue.use(Router)
 
@@ -27,8 +29,20 @@ export default new Router({
         {
             path: '/dashboard',
             name: 'Dashboard',
-            component: Dashboard
-        }
+            component: Dashboard,
+            children: [
+                {
+                    path: 'addTask',
+                    name: 'AddTask',
+                    component: AddTask
+                },
+                {
+                    path: 'tasksDone',
+                    name: 'TasksDone',
+                    component: TasksDone
+                }
+            ]
+        }       
     ],
     mode: 'history'
 })

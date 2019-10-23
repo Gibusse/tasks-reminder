@@ -6,11 +6,12 @@ class MySQL{
             host: 'HOSTNAME',
             user: 'USERNAME',
             password: 'PASSWORD',
-            database: 'DATABASE',
-            port: 'PORT'
+            database: 'DATABASE_NAME',
+            port: 3306
         });
     }
 } 
+
 
 
 module.exports = new MySQL();

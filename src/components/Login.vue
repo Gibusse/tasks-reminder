@@ -52,7 +52,10 @@ export default {
             .then(response => {
                 let res = response;
                 if(res.status === 200) this.$router.push('/dashboard');
+            }, error => {
+                swal("Erreur de connexion", "Unauthorized !!!", "error");
             })
+            
             }
             
         }

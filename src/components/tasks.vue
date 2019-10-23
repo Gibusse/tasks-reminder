@@ -1,85 +1,64 @@
 <template>
-  <v-container style="max-width: 600px;">
-    <v-timeline  clipped>
-      <v-timeline-item
-        fill-dot
-        class="white--text mb-12"
-        color="normal"
-        large
-      >
-        <template v-slot:icon>
-          <span>JL</span>
-        </template>
-        <v-text-field
-          v-model="title"
-          hide-details
-          flat
-          label="Leave a title..."
-          solo
-          @keydown.enter="comment"
-        >
-        </v-text-field>
-        <v-text-field
-          v-model="taskName"
-          hide-details
-          flat
-          label="Leave a description..."
-          solo
-          @keydown.enter="comment"
-        >
-          <template v-slot:append>
-            <v-btn
-              class="mx-0"
-              depressed
-              @click="comment"
-            >
-              Post
-            </v-btn>
-          </template>
-         
-        </v-text-field>
-      </v-timeline-item>
-
-      <v-slide-x-transition
-        group
-      >
-        <v-timeline-item
-          v-for="event in tasks"
-          :key="event.taskId"
-          color="red lighten-2"
+  <div>
+    <v-card
+      class="mx-auto mt-5 justify-space-between"
+      color="#26c6da"
+      dark
+      max-width="600" 
+      v-for="t in tasks"
+      :key="t.taskId"
+    >
+      <v-card-title>
+        <v-icon
           large
+          left
         >
+          mdi-alert-circle
+        </v-icon>
+        <span class="title font-weight-light" v-text="t.taskTitle"></span>
+      </v-card-title>
 
-        <template v-slot:opposite>
-          <span
-            v-text="event.taskDate"
-          ></span>
-        </template>
+      <v-card-text class="headline font-weight-bold" v-text="t.taskDescription"></v-card-text>
 
-        <v-card class="elevation-2">
-          <v-card-title v-text="event.title" class="headline"></v-card-title>
-          <v-card-text v-text="event.taskName"></v-card-text>
-          <v-btn class="text-right" color="primary" @click="taskCompleted">Fermer la tâche</v-btn>
-        </v-card>
-        </v-timeline-item>
-      </v-slide-x-transition>
+      <v-card-actions>
+        <v-list-item class="grow">
+          <v-list-item-avatar color="grey darken-3">
+            <v-img
+              class="elevation-6"
+              src=""
+            ></v-img>
+          </v-list-item-avatar>
 
-      <v-timeline-item
-        class="mb-6"
-        hide-dot
-      >
-      </v-timeline-item>
-    </v-timeline>
-  </v-container>
+          <v-list-item-content>
+            <v-list-item-title>Admin</v-list-item-title>
+          </v-list-item-content>
+
+          <v-row
+            align="center"
+            justify="end"
+          >
+            <v-icon class="mr-1">mdi-clock</v-icon>
+            <span class="subheading" v-text="t.taskDate"></span>
+            <v-card-actions>
+            <v-btn text @click="taskCompleted">Fermer la tâche</v-btn>
+          </v-card-actions>
+          </v-row>
+        </v-list-item>
+      </v-card-actions>
+    </v-card>
+  </div>
+
 </template>
 
 <script>
+import { timeout } from 'q'
   export default {
     data: () => ({
       tasks: [],
-      events: [{taskId:null, title:null, taskName:null, taskDate:null}],
-      taskName: "",
-      title: "",
+      events: [{taskId:null, taskTitle:null, taskDescription:null, taskDate:null}],
+      taskTitle: "",
+      taskDescription: "",
+      taskDate: "null",
       nonce: 0,
     }),
 
@@ -90,34 +69,12 @@
         })
     },
 
-    /* computed: {
-      timeline () {
-        return this.tasks.slice().reverse()
-      },
-    }, */
+    computed: {
+      
+    },
 
     methods: {
-      comment () {
-        const time = (new Date()).toTimeString()
-        if(this.title === "" || this.taskName === "") {
-          swal("Erreur", "Veuillez remplir les champs !!!", "error");
-
-        } else {
-            this.tasks.push({
-            taskId: this.nonce++,
-            title: this.title,
-            taskName: this.taskName,
-            taskDate: time.replace(/:\d{2}\sGMT-\d{4}\s\((.*)\)/, (match, contents) => {
-              return ` ${contents.split(' ').map(v => v.charAt(0)).join('')}`
-            }),
-          })
-
-          this.taskName = null,
-          this.title = null
-        }
-        
-      },
-
+    
       taskCompleted() {
         this.tasks.splice(event.taskId)
       }
