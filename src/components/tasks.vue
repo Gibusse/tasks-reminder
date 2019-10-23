@@ -38,7 +38,7 @@
             justify="end"
           >
             <v-icon class="mr-1">mdi-clock</v-icon>
-            <span class="subheading" v-text="t.taskDate"></span>
+            <span class="subheading">{{ t.taskDate | formatDate }}</span>
             <v-card-actions>
             <v-btn text @click="taskCompleted">Fermer la tâche</v-btn>
           </v-card-actions>
