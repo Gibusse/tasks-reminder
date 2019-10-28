@@ -6,6 +6,8 @@ import Register from '@/components/Register'
 import Dashboard from '@/components/Dashboard'
 import AddTask from '@/components/AddTask'
 import TasksDone from '@/components/TasksDone'
+import EmployeesList from '@/components/EmployeesList'
+import AddEmployee from '@/components/AddEmployee'
 
 Vue.use(Router)
 
@@ -40,6 +42,16 @@ export default new Router({
                     path: 'tasksDone',
                     name: 'TasksDone',
                     component: TasksDone
+                },
+                {
+                    path: 'addEmployee',
+                    name: 'AddEmployee',
+                    component: AddEmployee
+                },
+                {
+                    path: 'listEmployees',
+                    name: 'listEmployees',
+                    component: EmployeesList
                 }
             ]
         }       

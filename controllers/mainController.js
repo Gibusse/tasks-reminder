@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var user = require('../services/userQuery');
 var task = require('../Services/taskQuery');
+var employee = require('../Services/employeeQuery')
 
 /**
  * User registration
@@ -23,11 +24,19 @@ router.post('/add', (req, res) => {
 })
 
 /**
- * Retrieve all the tasks
+ * Retrieve all the tasks not urgent
  */
-router.get('/', (req, res) => {
-    task.findAll(res);
+router.get('/notUrgent', (req, res) => {
+    task.findAllNotUrgent(res);
 })
+
+/**
+ * Retrieve all the tasks urgent
+ */
+router.get('/urgent', (req, res) => {
+    task.findAllUrgent(res);
+})
+
 
 /**
  * Retrieve the task have been done 
@@ -40,7 +49,7 @@ router.get('/findDone', (req, res) => {
 /**
  * Mark task as done
  */
-router.post('/done', (req, res) => {
+router.put('/done/:id', (req, res) => {
     var params = req.body;
     task.updateDone(params, res);
 })
@@ -57,7 +66,8 @@ router.post('/undone', (req, res) => {
  * Mark task as verified
  */
 router.post('/verified', (req, res) => {
-    task.updateVerified(req, res);
+    var params = req.body;
+    task.updateVerified(params, res);
 })
 
 /**
@@ -73,6 +83,36 @@ router.post('/delete/:id', (req, res) => {
  */
 router.post('/deleteAll', (req, res) => {
     task.deleteAll(res);
+})
+
+/**
+ * Show all the employees
+ */
+router.get('/employessList', (req, res) => {
+    employee.getAll(res);
+})
+
+/**
+ * Create new employee
+ */
+router.post('/addEmployee', (req, res) => {
+    var param = req.body;
+    employee.addEmployee(param, res);
+})
+
+/**
+ * Delete employee
+ */
+router.post('/deleteEmployee', (req, res) => {
+    var param = req.body;
+    employee.deleteEmployee(param, res);
+})
+
+/**
+ * Create new employee
+ */
+router.post('/deleteEmployees', (req, res) => {
+    employee.deleteEmployees(res);
 })
 
 module.exports = router;

@@ -9,7 +9,6 @@ module.exports.register = function(userData, res) {
     mysql.db.query(querySelect, param, (err, row) => {
         if(row[0]) {
             if (userData.email === row[0].clientEmail) {
-                console.log(row);
                 res.status(401).send('The user already exist');
             }
         }else {

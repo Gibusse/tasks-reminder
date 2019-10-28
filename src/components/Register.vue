@@ -40,6 +40,8 @@
 </template> 
 
 <script>
+import configuration from '@/router/constants'
+
 export default {
     data() {
         return {
@@ -52,7 +54,7 @@ export default {
     },
     methods:{
        registerUser(){
-            axios.post('http://localhost:4000/api/register', this.register)
+            axios.post(configuration.host + configuration.port + configuration.api +'register', this.register)
             .then(response => {
                 let res = response.data
                 if(affectedRows === 1) this.$router.push('/')

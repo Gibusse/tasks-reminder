@@ -32,7 +32,9 @@
 </template> 
 
 <script>
+import configuration from '@/router/constants'
 export default {
+
     data() {
         return {
             login: {
@@ -48,7 +50,7 @@ export default {
                 swal("Erreur", "Veuillez remplir les champs !!!", "error");
 
             } else {
-                axios.post('http://localhost:4000/api/login', this.login)
+                axios.post(configuration.host+ configuration.port + configuration.api +'login', this.login)
             .then(response => {
                 let res = response;
                 if(res.status === 200) this.$router.push('/dashboard');

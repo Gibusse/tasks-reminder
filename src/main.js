@@ -8,9 +8,15 @@ import moment from 'moment'
 
 window.axios = axios
 Vue.config.productionTip = false
-Vue.filter('formatDate', function(value) {
+Vue.filter('formatDateTime', function(value) {
   if(value) {
     return moment(String(value)).format('DD/MM/YYYY hh:mm')
+  }
+})
+
+Vue.filter('formatDate', function(value) {
+  if(value) {
+    return moment(String(value)).format('DD/MM/YYYY')
   }
 })
 

@@ -1,8 +1,10 @@
 var mysql = require('../config/DB');
 
 module.exports.add = function(req, res) {
-    var queryAdd = 'INSERT INTO task(taskTitle, taskDescription, taskDone, taskVerified, taskDate) VALUES (?, ?, ?, ?, Now())';
-    var params = [req.taskTitle, req.taskDescription, req.taskDone, req.taskVerified]
+    var queryAdd = `INSERT INTO task(taskTitle, taskDescription, taskDone, taskVerified, taskLevel, employeeId, userId, taskDeadLine, taskDate)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, Now())`;
+    var params = [req.taskTitle, req.taskDescription, req.taskDone, req.taskVerified,
+                    req.taskLevel, req.employeeId, req.userId, req.taskDeadLine]
 
     mysql.db.query(queryAdd, params, (err, row) => {
         if(err) return res.status(400).send(err);
@@ -14,19 +16,37 @@ module.exports.add = function(req, res) {
 /**
  * Find all the tasks have been created and not done yet
  */
-module.exports.findAll = function(res) {
-    var querySelect = 'SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate FROM task WHERE taskDone = 0 AND taskVerified = 0';
+module.exports.findAllNotUrgent = function(res) {
+    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
+                        FROM task 
+                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0`;
 
     mysql.db.query(querySelect, (err, row) => {
         res.status(200).send(row);
     })
 }
 
+
+/**
+ * Find all the tasks have been created and not done yet
+ */
+module.exports.findAllUrgent = function(res) {
+    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
+                        FROM task 
+                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 1`;
+
+    mysql.db.query(querySelect, (err, row) => {
+        res.status(200).send(row);
+    })
+}
+
+
 /**
  * Find all the tasks have done but not verified
  */
 module.exports.findDone = function(res) {
-    var querySelect = 'SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate FROM task WHERE taskDone = 1 AND taskVerified = 0';
+    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
+                       FROM task WHERE taskDone = 1 AND taskVerified = 0`;
 
     mysql.db.query(querySelect, (err, row) => {
         res.status(200).send(row);

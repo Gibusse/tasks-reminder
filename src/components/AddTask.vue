@@ -33,12 +33,17 @@
 </template>
 
 <script>
+import configuration from '@/router/constants'
+
 export default {
     data: () => ({
       taskTitle: "",
       taskDescription: "",
       taskDone: 0,
-      taskVerified: 0
+      taskVerified: 0,
+      taskLevel : 0,
+      employeeId : 0,
+      userId : 0
     }),
 
     methods: {
@@ -52,10 +57,14 @@ export default {
                         "taskTitle":this.taskTitle,
                         "taskDescription": this.taskDescription,
                         "taskDone": this.taskDone,
-                        "taskVerified": this.taskVerified
+                        "taskVerified": this.taskVerified,
+                        "taskLevel" : this.taskLevel,
+                        "employeeId" : this.employeeId,
+                        "userId" : this.userId,
+                        "taskDeadLine" : this.taskDeadLine
                      };
                      
-                axios.post('http://localhost:4000/api/add', body)
+                axios.post(configuration.host+configuration.port + configuration.api +'add', body)
                 .then(response => {
                     if(response.status === 200 && response.statusText === "OK") swal("Succès", "Tâche créée avec succès !!!", "success")
 
