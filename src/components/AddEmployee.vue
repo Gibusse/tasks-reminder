@@ -85,7 +85,7 @@ import configuration from '@/router/constants'
 export default {
     data: () => ({
       employeeName: "",
-      employeeFirtsName: "",
+      employeeFirstName: "",
       employeeEmail: "",
       valid: false,
       nameRules: [
