@@ -43,7 +43,6 @@ module.exports.addEmployee = function(req, res) {
 }
 
 
-
 module.exports.deleteEmployee = function (req, res) {
     var queryDelete = 'DELETE FROM employee WHERE employeeId = ?';
     var param = [req.employeeId];

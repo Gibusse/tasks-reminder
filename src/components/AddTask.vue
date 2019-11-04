@@ -126,9 +126,6 @@ export default {
     },
 
     methods: {
-          comment () {
-        },
-
         validate () {
         if (this.$refs.form.validate()) {
           if(this.taskTitle === "" || this.taskTitle === null

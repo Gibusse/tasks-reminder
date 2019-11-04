@@ -103,7 +103,7 @@ router.post('/addEmployee', (req, res) => {
 /**
  * Delete employee
  */
-router.post('/deleteEmployee', (req, res) => {
+router.post('/deleteEmployee/:id', (req, res) => {
     var param = req.body;
     employee.deleteEmployee(param, res);
 })
