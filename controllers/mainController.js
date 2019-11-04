@@ -88,7 +88,7 @@ router.post('/deleteAll', (req, res) => {
 /**
  * Show all the employees
  */
-router.get('/employessList', (req, res) => {
+router.get('/employeesList', (req, res) => {
     employee.getAll(res);
 })
 

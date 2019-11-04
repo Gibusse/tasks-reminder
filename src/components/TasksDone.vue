@@ -28,7 +28,7 @@
 
           <v-icon class="mr-1">mdi-account</v-icon>
           <v-list-item-content>
-            <v-list-item-title>Hervet</v-list-item-title>
+            <v-list-item-title>{{ t.employeeName }}</v-list-item-title>
           </v-list-item-content>
 
           <v-row
@@ -51,6 +51,9 @@
             align="center"
             justify="end"
           >
+          <v-card-actions>
+            <v-btn text @click="taskNotCompleted(t)">Fermer la tâche</v-btn>
+          </v-card-actions>
             <v-card-actions>
             <v-btn text @click="taskCompleted(t)">Fermer la tâche</v-btn>
           </v-card-actions>
@@ -76,15 +79,30 @@ export default {
       taskDate: "null",
       taskLevel: "null",
       employeeId: 0,
+      employeeName: null,
       userId: 0,
       taskDeadLine: "",
     }),
 
     mounted() {
+      if (!this.$localStorage.get('user')) this.$router.push('/')
+
+      this.user = this.$localStorage.get('user')
+      
       axios.get(configuration.host+configuration.port + configuration.api +'findDone')
         .then(response => {
           this.tasks = response.data
         });
     },
+
+    methods: {
+      taskCompleted(t) {
+        console.log(t)
+      },
+
+      taskNotCompleted(t) {
+        console.log(t)
+      }
+    }
 }
 </script>

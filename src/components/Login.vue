@@ -53,9 +53,13 @@ export default {
                 axios.post(configuration.host+ configuration.port + configuration.api +'login', this.login)
             .then(response => {
                 let res = response;
+                let user = res.data[0].userId;
+                
+                this.$localStorage.set('user', user)
+
                 if(res.status === 200) this.$router.push('/dashboard');
             }, error => {
-                swal("Erreur de connexion", "Unauthorized !!!", "error");
+                swal("Erreur de connexion", "L'utilisateur n'existe pas !!!", "error");
             })
             
             }

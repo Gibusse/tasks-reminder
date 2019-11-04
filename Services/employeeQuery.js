@@ -10,14 +10,15 @@ module.exports.getAll = function(res) {
 
 
 module.exports.addEmployee = function(req, res) {
-    var queryInsert = 'INSERT INTO employee(employeeName, employeeFirstName, employeeEmail) VALUES (?, ?, ?)';
-    var params = [req.employeeName, req.employeeFirstName,req.employeeEmail];
+    var queryInsert = 'INSERT INTO employee(employeeName, employeeFirstName, employeeEmail, userId) VALUES (?, ?, ?, ?)';
+    var params = [req.employeeName, req.employeeFirstName, req.employeeEmail, req.userId];
 
     var querySelect = 'SELECT * FROM employee WHERE employeeName = ? AND employeeEmail = ?';
     
     mysql.db.query(querySelect, params, (err, search) => {
+        
         if(search[0]) {
-            if(req.employeeName === search[0].employeeName || req.employeeEmail === search[0].employeeEmail)
+            if(req.employeeName == search[0].employeeName || req.employeeEmail == search[0].employeeEmail)
              res.status(401).send('Employee name already exists');
 
         } else {
@@ -26,7 +27,16 @@ module.exports.addEmployee = function(req, res) {
 
                 res.status(200).send(result);
             })
-        }       
+        }   
+        
+        // No employee matches 
+        if (search === []) {
+            mysql.db.query(queryInsert, params, (err, result) => {
+                if(err) res.status(400).send(err);
+
+                res.status(200).send(result);
+            })
+        }
     })
 
    

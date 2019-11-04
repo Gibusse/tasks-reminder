@@ -56,7 +56,7 @@ export default {
     }),
 
     mounted() {
-      axios.get(configuration.host+configuration.port + configuration.api +'employessList')
+      axios.get(configuration.host+configuration.port + configuration.api +'employeesList')
         .then(response => {
           this.employees = response.data
         })

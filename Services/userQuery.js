@@ -27,7 +27,7 @@ module.exports.register = function(userData, res) {
 
 
 module.exports.login = function(userData, res) {
-    const query = 'SELECT userName, userPassword FROM user WHERE userPassword = ? AND userName = ?';
+    const query = 'SELECT userId, userName, userPassword FROM user WHERE userPassword = ? AND userName = ?';
     const param = [userData.password, userData.username];
 
     mysql.db.query(query, param, (err, row) => {
@@ -36,23 +36,19 @@ module.exports.login = function(userData, res) {
         if (row[0]) {
 
             if (userData.username !== row[0].userName) {
-
-                console.log('Invalid email', row[0].userName);
-
-                res.status(401).send('Invalid email');
+                res.status(400).send({error : 'Invalid email'});
 
             } else if (userData.password !== row[0].userPassword) {
-
-                console.log('Invalid password', row[0].userPassword);
-
-                res.status(401).send('Invalid password');
+                res.status(400).send({error : 'Invalid password'});
 
             } else {
-                res.status(200).send(row);
+
+                res.status(200).send(JSON.stringify(row));
             }
 
         } else {
-            res.status(401).send('User don\'t exists');
+
+            res.status(403).send({error: 'User don\'t exists'});
         }
 
     });

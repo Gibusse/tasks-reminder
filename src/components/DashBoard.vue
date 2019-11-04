@@ -36,12 +36,17 @@ import configuration from '@/router/constants'
 
 export default {
     data: () => ({
-
+      
     }),
+
+    mounted() {
+      if (!this.$localStorage.get('user')) this.$router.push('/')
+    },
     
     methods: {
         logout() {
             this.$router.push('/');
+            this.$localStorage.remove('user')
         }
     }
 }

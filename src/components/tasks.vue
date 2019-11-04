@@ -28,12 +28,11 @@
           <v-icon class="mr-1">mdi-account-clock</v-icon>
           <v-list-item-content>
             <v-list-item-title v-if="t.taskLevel == 0">Normal</v-list-item-title>
-            <v-list-item-title v-if="t.taskLevel == 1">Urgent</v-list-item-title>
           </v-list-item-content>
 
           <v-icon class="mr-1">mdi-account</v-icon>
           <v-list-item-content>
-            <v-list-item-title>Hervet</v-list-item-title>
+            <v-list-item-title>{{ t.employeeName }}</v-list-item-title>
           </v-list-item-content>
 
 
@@ -95,12 +94,11 @@
           <v-icon class="mr-1">mdi-account-clock</v-icon>
           <v-list-item-content>
             <v-list-item-title v-if="t.taskLevel == 1">Urgent</v-list-item-title>
-            <v-list-item-title v-if="t.taskLevel == 0">Normal</v-list-item-title>
           </v-list-item-content>
 
           <v-icon class="mr-1">mdi-account</v-icon>
           <v-list-item-content>
-            <v-list-item-title>Hervet</v-list-item-title>
+            <v-list-item-title>{{ t.employeeName }}</v-list-item-title>
           </v-list-item-content>
 
           <v-row
@@ -147,6 +145,7 @@ import configuration from '@/router/constants'
       taskDate: "null",
       taskLevel: "null",
       employeeId: 0,
+      employeeName: null,
       userId: 0,
       taskDeadLine: "",
     }),

@@ -87,6 +87,7 @@ export default {
       employeeName: "",
       employeeFirstName: "",
       employeeEmail: "",
+      "userId" : null,
       valid: false,
       nameRules: [
         v => !!v || 'Name is required',
@@ -103,6 +104,12 @@ export default {
       ]
     }),
 
+    mounted() {
+      if (!this.$localStorage.get('user')) this.$router.push('/')
+
+      this.user = this.$localStorage.get('user')
+    },
+
 
     methods: {
       reset () {
@@ -118,7 +125,8 @@ export default {
             let body = {
                     "employeeName":this.employeeName,
                     "employeeFirstName":this.employeeFirstName,
-                    "employeeEmail": this.employeeEmail
+                    "employeeEmail": this.employeeEmail,
+                    "userId" : this.user
                   };
                   
             axios.post(configuration.host+configuration.port + configuration.api +'addEmployee', body)
@@ -127,7 +135,7 @@ export default {
 
             },
             error => {
-                swal("Erreur", "Une erreur c'est produite lors de l'ajout de l'employé !!!", "error")
+              swal("Erreur", "L'employé existe déjà dans le système, veuillez créer un autre !!!", "error")
             })
             
             this.employeeName = "",

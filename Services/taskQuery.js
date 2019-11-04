@@ -17,9 +17,11 @@ module.exports.add = function(req, res) {
  * Find all the tasks have been created and not done yet
  */
 module.exports.findAllNotUrgent = function(res) {
-    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
+    var querySelect = `SELECT task.* , employee.employeeId, employee.employeeName
                         FROM task 
-                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0`;
+                        LEFT JOIN employee on task.employeeId = employee.employeeID
+                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0
+                        ORDER BY taskDate DESC`;
 
     mysql.db.query(querySelect, (err, row) => {
         res.status(200).send(row);
@@ -31,9 +33,11 @@ module.exports.findAllNotUrgent = function(res) {
  * Find all the tasks have been created and not done yet
  */
 module.exports.findAllUrgent = function(res) {
-    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
+    var querySelect = `SELECT task.* , employee.employeeId, employee.employeeName
                         FROM task 
-                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 1`;
+                        LEFT JOIN employee on task.employeeId = employee.employeeID 
+                        WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 1
+                        ORDER BY taskDate DESC`;
 
     mysql.db.query(querySelect, (err, row) => {
         res.status(200).send(row);
@@ -45,8 +49,11 @@ module.exports.findAllUrgent = function(res) {
  * Find all the tasks have done but not verified
  */
 module.exports.findDone = function(res) {
-    var querySelect = `SELECT taskId, taskTitle, taskDescription, taskDone, taskVerified, taskDate, taskLevel, employeeId, userId, taskDeadLine
-                       FROM task WHERE taskDone = 1 AND taskVerified = 0`;
+    var querySelect = `SELECT task.* , employee.employeeId, employee.employeeName
+                       FROM task 
+                       LEFT JOIN employee on task.employeeId = employee.employeeID
+                       WHERE taskDone = 1 AND taskVerified = 0
+                       ORDER BY taskDate DESC`;
 
     mysql.db.query(querySelect, (err, row) => {
         res.status(200).send(row);
