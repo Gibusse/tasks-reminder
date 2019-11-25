@@ -169,16 +169,8 @@ import configuration from '@/router/constants'
         this.tasksNotUrgents = []
         this.tasksUrgents = []
         let data = {
-          taskDate: task.taskDate,
-          taskDescription: task.taskDescription,
           taskDone: 1,
-          taskId: task.taskId,
-          taskTitle: task.taskTitle,
-          taskVerified: task.taskVerified,
-          taskLevel: task.taskLevel,
-          employeeId: 0,
-          userId: 0,
-          taskDeadLine: task.taskDeadLine
+          taskId: task.taskId
         }
         
         axios.put(configuration.host + configuration.port + configuration.api + 'done/'+task.taskId+'', data)

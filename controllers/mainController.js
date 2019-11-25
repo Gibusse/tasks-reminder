@@ -7,18 +7,18 @@ var employee = require('../Services/employeeQuery')
 /**
  * User registration
  */
-router.post('/register', (req, res) => {
+router.post('/register', async(req, res) => {
     user.register(req.body, res);
 })
 
 /**
  * User authentication
  */
-router.post('/login',(req, res) => {
+router.post('/login',async(req, res) => {
     user.login(req.body, res);
 })
 
-router.post('/add', (req, res) => {
+router.post('/add', async(req, res) => {
     var params = req.body;
     task.add(params, res);
 })
@@ -26,14 +26,14 @@ router.post('/add', (req, res) => {
 /**
  * Retrieve all the tasks not urgent
  */
-router.get('/notUrgent', (req, res) => {
-    task.findAllNotUrgent(res);
+router.get('/notUrgent', async(req, res) => {
+   task.findAllNotUrgent(res);
 })
 
 /**
  * Retrieve all the tasks urgent
  */
-router.get('/urgent', (req, res) => {
+router.get('/urgent', async(req, res) => {
     task.findAllUrgent(res);
 })
 
@@ -42,14 +42,14 @@ router.get('/urgent', (req, res) => {
  * Retrieve the task have been done 
  * and wait to be verified
  */
-router.get('/findDone', (req, res) => {
+router.get('/findDone', async(req, res) => {
     task.findDone(res);
 })
 
 /**
  * Mark task as done
  */
-router.put('/done/:id', (req, res) => {
+router.put('/done/:id', async(req, res) => {
     var params = req.body;
     task.updateDone(params, res);
 })
@@ -57,7 +57,7 @@ router.put('/done/:id', (req, res) => {
 /**
  * Mark task as undone
  */
-router.post('/undone', (req, res) => {
+router.put('/undone/:id', async(req, res) => {
     var params = req.body;
     task.updateUndone(params, res);
 })
@@ -65,7 +65,7 @@ router.post('/undone', (req, res) => {
 /**
  * Mark task as verified
  */
-router.post('/verified', (req, res) => {
+router.put('/verified/:id', async(req, res) => {
     var params = req.body;
     task.updateVerified(params, res);
 })
@@ -73,7 +73,7 @@ router.post('/verified', (req, res) => {
 /**
  * Delete on task
  */
-router.post('/delete/:id', (req, res) => {
+router.delete('/delete/:id', async(req, res) => {
     var param = req.body;
     task.deleteOne(param, res);
 })
@@ -81,37 +81,46 @@ router.post('/delete/:id', (req, res) => {
 /**
  * Delete all the tasks exists on DB
  */
-router.post('/deleteAll', (req, res) => {
+router.delete('/deleteAll', async(req, res) => {
     task.deleteAll(res);
 })
 
 /**
  * Show all the employees
  */
-router.get('/employeesList', (req, res) => {
+router.get('/employeesList', async(req, res) => {
     employee.getAll(res);
 })
 
 /**
  * Create new employee
  */
-router.post('/addEmployee', (req, res) => {
+router.post('/addEmployee', async(req, res) => {
     var param = req.body;
     employee.addEmployee(param, res);
 })
 
 /**
- * Delete employee
+ * Update employee
+ * @employee
  */
-router.post('/deleteEmployee/:id', (req, res) => {
+router.patch('/updateEmployee/:id', async(req, res) => {
     var param = req.body;
-    employee.deleteEmployee(param, res);
+    employee.updateEmployee(param, res);
 })
 
 /**
- * Create new employee
+ * Delete employee
  */
-router.post('/deleteEmployees', (req, res) => {
+router.delete('/deleteEmployee/:id', async(req, res) => {
+    var id = req.params;
+    employee.deleteEmployee(id, res);
+})
+
+/**
+ * Delete all employees
+ */
+router.delete('/deleteEmployees', async(req, res) => {
     employee.deleteEmployees(res);
 })
 

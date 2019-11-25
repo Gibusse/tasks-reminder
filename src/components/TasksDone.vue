@@ -1,7 +1,7 @@
 <template>
  <v-container fluid>
-    <h1>Tâche effectuée et à vérifier</h1>
-    <v-row class="ml-2 space-around">
+    <h1 align="center">Tâche effectuée et à vérifier</h1>
+    <v-row class="mx-auto mt-5 justify-space-between">
       <v-card 
         v-for="t in tasks"
         :key="t.taskId"
@@ -52,7 +52,7 @@
             justify="end"
           >
           <v-card-actions>
-            <v-btn text @click="taskNotCompleted(t)">Fermer la tâche</v-btn>
+            <v-btn class="ml-2" color="red" text @click="taskNotCompleted(t)">Tâche à refaire</v-btn>
           </v-card-actions>
             <v-card-actions>
             <v-btn text @click="taskCompleted(t)">Fermer la tâche</v-btn>
@@ -96,12 +96,52 @@ export default {
     },
 
     methods: {
+      // Tâche validée
       taskCompleted(t) {
-        console.log(t)
+        let data = {
+          taskVerified: 1,
+          taskId: t.taskId
+        }
+
+        axios.put(configuration.host + configuration.port + configuration.api + 'verified/'+t.taskId, data)
+        .then(response => {
+          let res = response.data;
+          if(res.affectedRows === 1) {
+              swal("Succès", "Tâche validée !!!", "success");
+
+              axios.get(configuration.host+configuration.port + configuration.api +'findDone')
+              .then(response => {
+                this.tasks = response.data
+              })
+            }
+        },
+        error => {
+          console.log('error :',error)
+        })
       },
 
+      // Tâche à refaire 
       taskNotCompleted(t) {
-        console.log(t)
+        let data = {
+          taskDone: 0,
+          taskId: t.taskId
+        }
+
+        axios.put(configuration.host + configuration.port + configuration.api + 'undone/'+ t.taskId, data)
+        .then(response => {
+          let res = response.data;
+          if(res.affectedRows === 1) {
+              swal("Succès", "Tâche annulée et à refaire !!!", "success");
+
+              axios.get(configuration.host+configuration.port + configuration.api +'findDone')
+              .then(response => {
+                this.tasks = response.data
+              })
+            }
+        },
+        error => {
+          
+        })
       }
     }
 }

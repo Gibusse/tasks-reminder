@@ -38,17 +38,28 @@ module.exports.addEmployee = function(req, res) {
             })
         }
     })
+};
 
-   
+module.exports.updateEmployee = function (req, res) {
+    var queryUpdate = `UPDATE employee 
+                        SET employeeName = ?, employeeFirstName = ?, employeeEmail = ?
+                        WHERE employeeId = ?`;
+    var params = [req.employeeName, req.employeeFirstName, req.employeeEmail, req.employeeId];
+
+    mysql.db.query(queryUpdate, params, (err,result) => {
+        if(err) res.status(401).send(err);
+
+        res.status(200).send(result);
+    })
 }
-
 
 module.exports.deleteEmployee = function (req, res) {
     var queryDelete = 'DELETE FROM employee WHERE employeeId = ?';
-    var param = [req.employeeId];
+    var param = [req.id];
 
     mysql.db.query(queryDelete, param, (err, result) => {
-        if(err) res.status(401).send(result);
+
+        if(err) res.status(401).send(err);
 
         res.status(200).send(result);
     })
