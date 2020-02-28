@@ -3,11 +3,11 @@ var mysql = require('mysql');
 class MySQL{
     constructor() {
         this.db = mysql.createPool({
-            host: 'HOSTNAME',
-            user: 'USERNAME',
-            password: 'PASSWORD',
-            database: 'DATABASE',
-            port: 'PORT'
+            host: 'localhost',
+            user: 'root',
+            password: 'coolbreeze01',
+            database: 'tasksreminder',
+            port: 3306
         });
     }
 } 

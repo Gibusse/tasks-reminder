@@ -17,23 +17,24 @@ module.exports.add = function(req, res) {
  * Find all the tasks have been created and not done yet
  */
 module.exports.findAllNotUrgent = function(req, res) {
-    var start = (req.query.page -1 )* req.query.limit;
-    var end = (req.query.page * req.query.limit) -1;
+    var skip = parseInt((req.query.page - 1) * req.query.limit);
+    var limit = parseInt(req.query.limit);
     var querySelect = `SELECT task.* , employee.employeeId, employee.employeeName
                         FROM task
                         LEFT JOIN employee on task.employeeId = employee.employeeID
                         WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0
                         ORDER BY taskDate DESC
-                        LIMIT ${start},${end}`;
+                        LIMIT ${skip},${limit}`;
 
     mysql.db.query(`SELECT COUNT(task.taskId) as totalCount FROM task
-                LEFT JOIN employee on task.employeeId = employee.employeeID
-                WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0
-                ORDER BY taskDate DESC`, (err, result) => {
+            LEFT JOIN employee on task.employeeId = employee.employeeID
+            WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 0
+            ORDER BY taskDate DESC`, (err, result) => {
         const totalCount = result[0].totalCount;
+        const numPages = Math.ceil(totalCount / limit)
 
         mysql.db.query(querySelect, (err, row) => {
-            const body = {data: row, total: totalCount}
+            const body = {data: row, total: numPages}
             res.status(200).send(body);
         })
     })
@@ -44,17 +45,26 @@ module.exports.findAllNotUrgent = function(req, res) {
  * Find all the tasks have been created and not done yet
  */
 module.exports.findAllUrgent = function(req, res) {
-    var start = (req.query.page -1 )* req.query.limit;
-    var end = (req.query.page * req.query.limit) -1;
+    var skip = parseInt((req.query.pageUrgent -1 ) * req.query.limitUrgent);
+    var limit = parseInt(req.query.limitUrgent);
     var querySelect = `SELECT task.* , employee.employeeId, employee.employeeName
                         FROM task 
                         LEFT JOIN employee on task.employeeId = employee.employeeID 
                         WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 1
                         ORDER BY taskDate DESC
-                        LIMIT ${start},${end}`;
+                        LIMIT ${skip},${limit}`;
 
-    mysql.db.query(querySelect, (err, row) => {
-        res.status(200).send(row);
+    mysql.db.query(`SELECT COUNT(task.taskId) as totalCount FROM task
+            LEFT JOIN employee on task.employeeId = employee.employeeID
+            WHERE taskDone = 0 AND taskVerified = 0 AND taskLevel = 1
+            ORDER BY taskDate DESC`, (err, result) => {
+        const totalCount = result[0].totalCount;
+        const numPages = Math.ceil(totalCount / limit)
+
+        mysql.db.query(querySelect, (err, row) => {
+            const body = {data: row, total: numPages}
+            res.status(200).send(body);
+        })
     })
 
 }

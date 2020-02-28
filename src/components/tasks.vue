@@ -33,7 +33,7 @@
             <!-- Dialog modal for details on normal priority -->
             <div class="my-2">
               <v-row justify="center">
-                  <v-dialog v-model="cancel" persistent max-width="320">
+                  <v-dialog v-model="dialog" persistent max-width="320">
                   <template v-slot:activator="{ on }">
                       <v-btn @click="show(t)" color="warning" dark v-on="on">
                           Détails
@@ -100,7 +100,7 @@
             <v-pagination
               v-model="page"
               :length="tmp.total"
-              @input="paginate(page)"
+              @input="paginateNotUrgent(page)"
               circle
             ></v-pagination>
           </div>
@@ -201,6 +201,14 @@
             </v-row>
           </div>
         </v-card>
+        <div>
+          <v-pagination
+            v-model="pageUrgent"
+            :length="tmpUrgent.total"
+            @input="paginateUrgent(pageUrgent)"
+            circle
+          ></v-pagination>
+        </div>
       </v-col>
     </v-row>
 
@@ -231,25 +239,29 @@ import configuration from '@/router/constants'
       taskDeadLine: "",
       task: {},
       page: 1,
-      limit: 10,
+      pageUrgent: 1,
+      limitUrgent: 5,
+      limit: 5,
       perPage: 10,
       pages: [],
       tmp: [],
+      tmpUrgent: [],
 
       dialog: false,
       cancel: false
     }),
 
     mounted() {
-      axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent?page='+this.page+'&limit=2')
+      axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent?page='+this.page+'&limit='+this.limit)
         .then(response => {
           this.tmp = response.data
           this.tasksNotUrgents = this.tmp.data;
         })
 
-      axios.get(configuration.host + configuration.port + configuration.api + 'urgent')
+      axios.get(configuration.host + configuration.port + configuration.api + 'urgent?pageUrgent='+this.pageUrgent+'&limitUrgent='+this.limitUrgent)
       .then(response => {
-        this.tasksUrgents = response.data
+        this.tmpUrgent = response.data
+        this.tasksUrgents = this.tmpUrgent.data;
       })
     },
 
@@ -261,15 +273,18 @@ import configuration from '@/router/constants'
         },
 
       disagree () {
-            this.cancel = false
-            axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent')
+            this.dialog = false;
+            this.cancel = false;
+            axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent?page='+this.page+'&limit='+this.limit)
               .then(response => {
-                this.tasksNotUrgents = response.data
+                this.tmp = response.data
+                this.tasksNotUrgents = this.tmp.data;
               })
 
-            axios.get(configuration.host + configuration.port + configuration.api + 'urgent')
+           axios.get(configuration.host + configuration.port + configuration.api + 'urgent?pageUrgent='+this.pageUrgent+'&limitUrgent='+this.limitUrgent)
             .then(response => {
-              this.tasksUrgents = response.data
+              this.tmpUrgent = response.data
+              this.tasksUrgents = this.tmpUrgent.data;
             })
         },
 
@@ -305,11 +320,19 @@ import configuration from '@/router/constants'
 
       },
 
-      paginate(page) {
-        axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent?page='+page+'&limit=2')
+      paginateNotUrgent(page) {
+        axios.get(configuration.host + configuration.port + configuration.api + 'notUrgent?page='+page+'&limit='+this.limit)
         .then(response => {
           this.tmp = response.data
           this.tasksNotUrgents = this.tmp.data;
+        })
+      },
+
+      paginateUrgent(page) {
+        axios.get(configuration.host + configuration.port + configuration.api + 'urgent?pageUrgent='+page+'&limitUrgent='+this.limitUrgent)
+        .then(response => {
+          this.tmpUrgent = response.data
+          this.tasksUrgents = this.tmpUrgent.data;
         })
       },
 
