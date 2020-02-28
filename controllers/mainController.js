@@ -1,8 +1,14 @@
 var express = require('express');
+var paginate = require('express-paginate');
 var router = express.Router();
 var user = require('../services/userQuery');
 var task = require('../Services/taskQuery');
 var employee = require('../Services/employeeQuery')
+
+
+// keep this before all routes that will use pagination
+router.use(paginate.middleware(10, 50));
+
 
 /**
  * User registration
@@ -27,14 +33,15 @@ router.post('/add', async(req, res) => {
  * Retrieve all the tasks not urgent
  */
 router.get('/notUrgent', async(req, res) => {
-   task.findAllNotUrgent(res);
+
+   task.findAllNotUrgent(req, res);
 })
 
 /**
  * Retrieve all the tasks urgent
  */
 router.get('/urgent', async(req, res) => {
-    task.findAllUrgent(res);
+    task.findAllUrgent(req, res);
 })
 
 

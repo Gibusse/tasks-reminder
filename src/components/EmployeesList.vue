@@ -25,13 +25,13 @@
                                 <td>
                                     <div class="my-2">
                                         <v-row justify="center">
-                                            <v-form> 
+                                            <v-form>
                                                 <v-dialog v-model="dialog" persistent max-width="600px">
                                                     <template v-slot:activator="{ on }">
                                                         <v-btn color="orange" @click="show(em)" dark v-on="on">
                                                                 <v-icon class="mr-1">mdi-file-document-edit-outline</v-icon>
                                                                     Modifier
-                                                            </v-btn>   
+                                                            </v-btn>
                                                     </template>
                                                     <v-card>
                                                         <v-card-title>
@@ -133,7 +133,7 @@ export default {
                 swal("Erreur", "Veuillez remplir les champs !!!", "error");
 
             } else {
-                
+
                 this.dialog = false
                 let body = {
                         "employeeId":em.employeeId,
@@ -141,7 +141,7 @@ export default {
                         "employeeFirstName": em.employeeFirstName,
                         "employeeEmail": em.employeeEmail
                      };
-                     
+
                 axios.patch(configuration.host+configuration.port + configuration.api +'updateEmployee/'+ em.employeeId, body)
                 .then(response => {
                     if(response.status === 200 && response.statusText === "OK") swal("Succès", "Mise à jour de l'employé effectuée avec succès !!!", "success")
@@ -155,7 +155,6 @@ export default {
                 error => {
                     swal("Erreur", "Une erreur c'est produite lors de la mise à jour de l'employé !!!", "error")
                 })
-                
             }
         },
 
@@ -169,7 +168,7 @@ export default {
             axios.delete(configuration.host+configuration.port + configuration.api +'deleteEmployee/'+ em.employeeId)
                 .then(response => {
                     if(response.status === 200 && response.statusText === "OK") swal("Succès", "Suppression de l'employé effectuée avec succès !!!", "success")
-                    
+
                     axios.get(configuration.host+configuration.port + configuration.api +'employeesList')
                     .then(response => {
                         this.employees = response.data
@@ -177,7 +176,7 @@ export default {
 
                 },
                 error => {
-                    
+
                     swal("Erreur", "Une erreur c'est produite lors de la suppression de l'employé !!!", "error")
                 })
         },

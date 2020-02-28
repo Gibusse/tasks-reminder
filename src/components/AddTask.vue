@@ -33,7 +33,18 @@
             single-line
             required
           ></v-select>
-          
+
+          <v-select
+            v-model="level"
+            :items="this.taskLevels"
+            item-text="taskLevelName"
+            :rules="[v => !!v || 'Item is required']"
+            label="Priorité"
+            return-object
+            single-line
+            required
+          ></v-select>
+
           <v-date-picker
             v-model="taskDeadLine"
             :rules="deadLineRules"
@@ -86,11 +97,12 @@ export default {
       taskDescription: "",
       taskDone: 0,
       taskVerified: 0,
-      taskLevel : 0,
+      taskLevel : {taskLevelId:0, taskLevelName: null, taskLevelStatus: 0},
       employeeId : 0,
       userId : 0,
       taskDeadLine: null,
       empl:{employeeId:0, employeeName: null, employeeFirstName: null, employeeEmail: null},
+      level : {taskLevelId:0, taskLevelName: null, taskLevelStatus: 0},
 
       valid: true,
       titleRules: [
@@ -108,11 +120,12 @@ export default {
         v => (v && v.length <= 25) || 'DeadLine must be a date',
       ],
 
+      taskLevels: [],
+
       select: null,
       checkbox: false,
     }),
 
-    
 
     mounted() {
       if (!this.$localStorage.get('user')) this.$router.push('/')
@@ -121,6 +134,10 @@ export default {
         .then(response => {
           this.employees = response.data
         });
+
+      this.taskLevels = [{taskLevelId:1, taskLevelName: 'normal', taskLevelStatus: 0},
+                         {taskLevelId:2, taskLevelName: 'urgent', taskLevelStatus: 1}
+                         ]  
 
       this.user = this.$localStorage.get('user')
     },
@@ -138,12 +155,12 @@ export default {
                         "taskDescription": this.taskDescription,
                         "taskDone": this.taskDone,
                         "taskVerified": this.taskVerified,
-                        "taskLevel" : this.taskLevel,
+                        "taskLevel" : this.level.taskLevelStatus,
                         "employeeId" : this.empl.employeeId,
                         "userId" : this.user,
                         "taskDeadLine" : this.taskDeadLine
                      };
-                     
+
                 axios.post(configuration.host+configuration.port + configuration.api +'add', body)
                 .then(response => {
                     if(response.status === 200 && response.statusText === "OK") swal("Succès", "Tâche créée avec succès !!!", "success")
@@ -154,7 +171,11 @@ export default {
                 })
                 
                 this.taskTitle = "",
-                this.taskDescription = ""
+                this.taskDescription = "",
+                this.level = "",
+                this.empl = "",
+                this.taskDeadLine = new Date(),
+                this.checkbox = false
             }
         }
       },
